@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BombBlock : Block
 {
-    public static System.Action<Vector3> OnBombDestroy;
+    //public Action<Vector3> OnBombDestroyed;
+    public Action OnBombDestroyed;
     public override void DestroyBlock()
     {
-        OnBombDestroy(transform.position);
+        //OnBombDestroyed(transform.position);
+        OnBombDestroyed?.Invoke();
         base.DestroyBlock();
     }
 }

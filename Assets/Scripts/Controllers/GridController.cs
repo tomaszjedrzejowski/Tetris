@@ -7,14 +7,15 @@ public class GridController : MonoBehaviour
 {
     public Action<TetraminoMoveInstance> OnValidMove;
     public Action<TetraminoMoveInstance> OnInvalidMove;
-    public Action OnLineCompleted;
     public Action<bool> OnLastRowReached;
+    public Action OnLineCompleted;
+    public Action OnLineCleanUpEnd;
 
     [SerializeField] private TetraminoController tetraminoController;
+    [SerializeField] private PowerUpController powerUpController;
 
     private BoardGrid _grid;
-    private Block[,] _gameGrid;
-    private List<Vector3> _bombCosualties = new List<Vector3>();
+    private Block[,] _gameGrid;    
 
     void Start()
     {
@@ -23,8 +24,7 @@ public class GridController : MonoBehaviour
 
         tetraminoController.OnTryMovement += ValidateMove;
         tetraminoController.OnTetraminoDestroyed += HandleDestroyedTetramino;
-
-        BombBlock.OnBombDestroy += HandleBombPowerUp; // TODO static event - refctor
+        powerUpController.OnDestroyBombTargets += HandleBombTargets;
     }
 
     private void OnDisable()
@@ -42,21 +42,7 @@ public class GridController : MonoBehaviour
         }
         GridCleanUp();
         OnLastRowReached?.Invoke(ChcekHeighestLine());
-    }
-
-    private void HandleBombPowerUp(Vector3 bombPosition)
-    {
-        int bombRange = 1;
-        for (int x = -bombRange; x <= bombRange; x++)
-        {
-            for (int y = -bombRange; y <= bombRange; y++)
-            {
-                Vector3 coordinatesToCheck = new Vector3(bombPosition.x + x, bombPosition.y + y);
-                _bombCosualties.Add(coordinatesToCheck);
-                Debug.Log(coordinatesToCheck);
-            }
-        }
-    }
+    }    
 
     private void GridCleanUp()
     {
@@ -69,21 +55,23 @@ public class GridController : MonoBehaviour
             GridCleanUp();            
         }
         else return;
-        foreach (var item in _bombCosualties)
+        OnLineCleanUpEnd?.Invoke();
+    }
+
+    private void HandleBombTargets(List<Vector3> bombTargets)
+    {
+        foreach (var vector in bombTargets)
         {
-            if (Mathf.RoundToInt(item.x) >= 0 && Mathf.RoundToInt(item.x) <= 9 && Mathf.RoundToInt(item.y) >= 0 && Mathf.RoundToInt(item.y) <= 19)
+            if (Mathf.RoundToInt(vector.x) >= 0 && Mathf.RoundToInt(vector.x) <= 9 && Mathf.RoundToInt(vector.y) >= 0 && Mathf.RoundToInt(vector.y) <= 19)
             {
-                if (_gameGrid[Mathf.RoundToInt(item.x), Mathf.RoundToInt(item.y)] != null)
+                if (_gameGrid[Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y)] != null)
                 {
-                    var block = _gameGrid[Mathf.RoundToInt(item.x), Mathf.RoundToInt(item.y)];
+                    var block = _gameGrid[Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y)];
                     _grid.RemoveFromGrid(block);
                     block.DestroyBlock();
-                    Debug.Log("Destroing!");
                 }
             }
-
         }
-        _bombCosualties.Clear();
     }
 
     private void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)

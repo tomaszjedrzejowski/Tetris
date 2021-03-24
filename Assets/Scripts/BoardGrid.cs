@@ -19,6 +19,7 @@ public class BoardGrid
         }
         catch (System.IndexOutOfRangeException)
         {
+            Debug.Log("Add to grid failed");
             return;
         }
     }
@@ -30,7 +31,8 @@ public class BoardGrid
             _gameGrid[block.WidthPosition, block.HeightPosition] = null;
         }
         catch (System.IndexOutOfRangeException)
-        {            
+        {
+            Debug.Log("Remove from grid failed");
             return;
         }
     }

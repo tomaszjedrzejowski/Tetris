@@ -16,7 +16,7 @@ public class RegularTetramino : Tetramino
         int tetraminoID = TetraminoID;
         List<Vector3> positionsToCheck = new List<Vector3>();
 
-        foreach (var item in GetTetraminoBlocks())
+        foreach (var item in GetBlocks())
         {
             Vector3 desiredPosition = item.CalculateClockwiseRotationPosition(PivotBlock.transform);
             desiredPosition = ApplyWallKick(desiredPosition, tetraminoID, rotationState, testNumber);

@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368549402b7f63641a3d96a7ad54bd07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 286138421}
+  gridController: {fileID: 1677778308}
   tetraminoSpawner: {fileID: 1425093373}
   gameControlller: {fileID: 869492312}
 --- !u!4 &169170378
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 171564415}
   tetraminoController: {fileID: 169170377}
-  spawner: {fileID: 0}
+  spawner: {fileID: 1425093373}
 --- !u!114 &171564415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +326,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 286138420}
-  - component: {fileID: 286138421}
   m_Layer: 0
   m_Name: GameBoard
   m_TagString: Untagged
@@ -350,19 +349,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &286138421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286138419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd7bd9de540f1d6469a017abd92717c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tetraminoController: {fileID: 169170377}
 --- !u!1 &356860813
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bd621f0fa5df945a182b340c483bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 286138421}
+  gridController: {fileID: 1677778308}
   tetraminoController: {fileID: 169170377}
   uIController: {fileID: 1769475007}
   lineThreshold: 5
@@ -723,6 +709,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &890653693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 890653695}
+  - component: {fileID: 890653694}
+  m_Layer: 0
+  m_Name: PowerUpController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &890653694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890653693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e191320ce5480cb4fbc0e5966b7350ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridController: {fileID: 1677778308}
+  tetraminoSpawner: {fileID: 1425093373}
+--- !u!4 &890653695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890653693}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &960844825
 GameObject:
@@ -882,8 +913,8 @@ MonoBehaviour:
   - {fileID: 1263245385583069539, guid: 51f0a18908f962746ae00d645503fc0c, type: 3}
   - {fileID: 2377909445662264268, guid: d4d52574727e4ef478e4d3c5b474a591, type: 3}
   - {fileID: 7248123732795132885, guid: d0b0bc8935c5a5043a53b0c9eebb0a1b, type: 3}
+  powerUpPool:
   - {fileID: 4816818566137275075, guid: 10ef8ce8038b52341a01556ffa201e4c, type: 3}
-  powerUpPool: []
   nextPieceNest: {fileID: 1321184522}
 --- !u!4 &1425093374
 Transform:
@@ -1158,6 +1189,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1677778307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1677778309}
+  - component: {fileID: 1677778308}
+  m_Layer: 0
+  m_Name: GridController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1677778308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677778307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd7bd9de540f1d6469a017abd92717c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tetraminoController: {fileID: 169170377}
+  powerUpController: {fileID: 890653694}
+--- !u!4 &1677778309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677778307}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1769475002
 GameObject:

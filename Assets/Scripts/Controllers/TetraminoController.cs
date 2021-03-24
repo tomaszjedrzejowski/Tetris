@@ -117,7 +117,7 @@ public class TetraminoController : MonoBehaviour
 
     private void SettleDownTetramino()
     {
-        List<Block> blocksToGrid = _activeTetramino.GetTetraminoBlocks();
+        List<Block> blocksToGrid = _activeTetramino.GetBlocks();
         OnTetraminoDestroyed?.Invoke(blocksToGrid);
         _activeTetramino.DestroyTetramino();
         tetraminoSpawner.SpawnTetramino();

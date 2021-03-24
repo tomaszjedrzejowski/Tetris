@@ -30,7 +30,7 @@ public abstract class Tetramino : MonoBehaviour, IRotate<List<Vector3>>
     {
         List<Vector3> positionsToCheck = new List<Vector3>();
 
-        foreach (var item in GetTetraminoBlocks())
+        foreach (var item in GetBlocks())
         {
             Vector3 desiredPosition = item.transform.position;
             positionsToCheck.Add(desiredPosition);
@@ -41,7 +41,7 @@ public abstract class Tetramino : MonoBehaviour, IRotate<List<Vector3>>
     public virtual List<Vector3> CalculateMove(Vector3 direction)
     {
         List<Vector3> positionsToCheck = new List<Vector3>();
-        foreach (var item in GetTetraminoBlocks())
+        foreach (var item in GetBlocks())
         {
             Vector3 desiredPosition = item.CalculateNewPosition(direction);
             positionsToCheck.Add(desiredPosition);
@@ -71,7 +71,7 @@ public abstract class Tetramino : MonoBehaviour, IRotate<List<Vector3>>
         }        
     }
 
-    public List<Block> GetTetraminoBlocks()
+    public List<Block> GetBlocks()
     {
         return myBlocks;
     }

@@ -6,10 +6,12 @@ using UnityEngine;
 public class TetraminoSpawner : MonoBehaviour
 {
     public Action<Tetramino> OnTetraminoSpawn;
+    public Action<PowerUp> OnPowerUpAdd;
     
     [SerializeField] private List<Tetramino> tetraminoPool = new List<Tetramino>();
     [SerializeField] private List<PowerUp> powerUpPool = new List<PowerUp>();
     [SerializeField] private Transform nextPieceNest;
+
     private List<Tetramino> _randomizelPool;
     private Tetramino currentTetramino;
     private Tetramino nextTetramino;
@@ -19,9 +21,10 @@ public class TetraminoSpawner : MonoBehaviour
         try
         {
             if (_randomizelPool.Count <= 0) CreateRandomPool();
-            if (nextTetramino != null) currentTetramino = nextTetramino;
-            else currentTetramino = Instantiate(_randomizelPool[0]);
-            nextTetramino = Instantiate(_randomizelPool[1], nextPieceNest.position, Quaternion.identity);
+            //if (nextTetramino != null) currentTetramino = nextTetramino;
+            //else 
+            currentTetramino = Instantiate(_randomizelPool[0]);
+            //nextTetramino = Instantiate(_randomizelPool[1], nextPieceNest.position, Quaternion.identity);
             _randomizelPool.Remove(_randomizelPool[0]);
             OnTetraminoSpawn?.Invoke(currentTetramino);
         }
@@ -45,9 +48,9 @@ public class TetraminoSpawner : MonoBehaviour
     }
 
     public void AddPowerUpToPool( int powerUpIndex) // redu
-    {
-        return; // avoid bugg
+    {       
         _randomizelPool.Insert(0, powerUpPool[powerUpIndex]);
-        nextTetramino = _randomizelPool[0];
+        //nextTetramino = _randomizelPool[0];
+        OnPowerUpAdd?.Invoke(powerUpPool[powerUpIndex]);
     }
 }

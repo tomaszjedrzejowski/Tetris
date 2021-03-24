@@ -16,7 +16,7 @@ public class TetraminoVariantI : Tetramino
         List<Vector3> positionsToCheck = new List<Vector3>();
 
 
-        foreach (var item in GetTetraminoBlocks())
+        foreach (var item in GetBlocks())
         {
             Vector3 desiredPosition = item.CalculateClockwiseRotationPosition(PivotBlock.transform);
             desiredPosition = ApplyRegulationKick(desiredPosition, rotationState);
