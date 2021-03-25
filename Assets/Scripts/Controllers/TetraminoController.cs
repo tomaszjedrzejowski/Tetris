@@ -39,11 +39,14 @@ public class TetraminoController : MonoBehaviour
     public void TryRotate()
     {
         try
-        {
+        {            
             if (!_isActive) return;
-            var positionsToCheck = _activeTetramino.CalculateRotation(_rotationAttempt);            
-            TetraminoMoveInstance tetraminoMoveInstance = new TetraminoMoveInstance(positionsToCheck, true);
-            OnTryMovement?.Invoke(tetraminoMoveInstance);
+            if (_activeTetramino is IRotate)
+            {               
+                var positionsToCheck = ((IRotate)_activeTetramino).CalculateRotation(_rotationAttempt);
+                TetraminoMoveInstance tetraminoMoveInstance = new TetraminoMoveInstance(positionsToCheck, true);
+                OnTryMovement?.Invoke(tetraminoMoveInstance);
+            }
         }
         catch(NullReferenceException)
         {            
@@ -93,10 +96,10 @@ public class TetraminoController : MonoBehaviour
     private void HandleValidMove(TetraminoMoveInstance tetraminoMoveInstance)
     {
         _activeTetramino.MoveTetramino(tetraminoMoveInstance.GetDesiredPositions());
-        if (tetraminoMoveInstance.GetIsRotation())
+        if (tetraminoMoveInstance.GetIsRotation() && _activeTetramino is IRotate)
         {
             _rotationAttempt = 0;
-            _activeTetramino.UpdateRotationState();
+            ((IRotate)_activeTetramino).UpdateRotationState();
         }        
     }
 

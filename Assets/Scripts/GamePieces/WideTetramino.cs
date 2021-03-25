@@ -2,15 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TetraminoVariantI : Tetramino
+public class WideTetramino : Tetramino, IRotate
 {
+    public int RotationStateID { get; private set; }
+    public Block PivotBlock { get; private set; }
+    [SerializeField] private Block pivotBlock;
+    private enum rotationState { spwan = 0, rotationRight90 = 1, rotationRight180 = 2, rotationLeft90 = 3 };
+    private rotationState _rotationState;
+
     private readonly Vector3[,] _kickTests = new Vector3[5, 4] { { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, },
                                                                         {new Vector3(-2, 0), new Vector3(-1, 0), new Vector3(2, 0), new Vector3(1, 0) },
                                                                         {new Vector3(1, 0), new Vector3(2, 0), new Vector3(-1, 0), new Vector3(-2, 0) },
                                                                         {new Vector3(-2, -1), new Vector3(-1, 2), new Vector3(2, 1), new Vector3(1, -2) },
                                                                         {new Vector3(1, 2), new Vector3(2, -1), new Vector3(-1, -2), new Vector3(-2, 1) } };
-       
-    public override List<Vector3> CalculateRotation(int testNumber)
+
+    public override void Start()
+    {
+        _rotationState = rotationState.spwan;
+        RotationStateID = (int)_rotationState;
+        PivotBlock = pivotBlock;
+        base.Start();
+    }
+    public List<Vector3> CalculateRotation(int testNumber)
     {
         int rotationState = RotationStateID;
         List<Vector3> positionsToCheck = new List<Vector3>();
@@ -24,6 +37,14 @@ public class TetraminoVariantI : Tetramino
             positionsToCheck.Add(desiredPosition);
         }
         return positionsToCheck;
+    }
+    public void UpdateRotationState()
+    {
+        if (RotationStateID == 0) _rotationState = rotationState.rotationRight90;
+        else if (RotationStateID == 1) _rotationState = rotationState.rotationRight180;
+        else if (RotationStateID == 2) _rotationState = rotationState.rotationLeft90;
+        else if (RotationStateID == 3) _rotationState = rotationState.spwan;
+        RotationStateID = (int)_rotationState;
     }
 
     private Vector3 ApplyRegulationKick(Vector3 desiredPosition, int rotationID)

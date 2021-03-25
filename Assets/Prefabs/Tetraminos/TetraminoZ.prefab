@@ -425,10 +425,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tetraminoID: 0
   spawnPosition: {x: 4, y: 20, z: 0}
-  blockPrefab: {fileID: 0}
-  pivotBlock: {fileID: 8708497984641232247}
   myBlocks:
   - {fileID: 8708497984602896757}
   - {fileID: 8708497984641232247}
   - {fileID: 8708497986529867590}
   - {fileID: 8708497985284375519}
+  pivotBlock: {fileID: 8708497984641232247}

@@ -49,13 +49,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tetraminoID: 0
   spawnPosition: {x: 4, y: 20, z: 0}
-  blockPrefab: {fileID: 0}
-  pivotBlock: {fileID: 994094966097539009}
   myBlocks:
   - {fileID: 994094966008740803}
   - {fileID: 994094966097539009}
   - {fileID: 994094965788292592}
   - {fileID: 994094966489022825}
+  pivotBlock: {fileID: 994094966097539009}
 --- !u!1 &7324758493354087444
 GameObject:
   m_ObjectHideFlags: 0

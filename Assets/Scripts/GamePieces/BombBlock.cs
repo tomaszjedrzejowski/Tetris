@@ -6,11 +6,11 @@ using System;
 public class BombBlock : Block
 {
     //public Action<Vector3> OnBombDestroyed;
-    public Action OnBombDestroyed;
+    public Action<Vector3> OnBombDestroyed;
+    
     public override void DestroyBlock()
     {
-        //OnBombDestroyed(transform.position);
-        OnBombDestroyed?.Invoke();
+        OnBombDestroyed?.Invoke(transform.position);
         base.DestroyBlock();
     }
 }

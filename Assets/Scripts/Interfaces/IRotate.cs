@@ -1,4 +1,8 @@
-﻿public interface IRotate<T>
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public interface IRotate
 {
-    T CalculateRotation(int value);
+    List<Vector3> CalculateRotation(int value);
+    void UpdateRotationState();
 }

@@ -11,11 +11,12 @@ public class PowerUpController : MonoBehaviour
     [SerializeField] private TetraminoSpawner tetraminoSpawner;
 
     private List<Vector3> _bombCosualties = new List<Vector3>();
-    private BombBlock _bombBlock;   
+    private BombBlock _bombBlock;
+    private Block _fillBlock;
 
     private void Start()
     {
-        tetraminoSpawner.OnPowerUpAdd += RegisterPowerUp;
+        tetraminoSpawner.OnTetraminoSpawn += RegisterPowerUp;
         gridController.OnLineCleanUpEnd += DestroyBombTargets;
     }
 
@@ -24,35 +25,34 @@ public class PowerUpController : MonoBehaviour
         _bombBlock.OnBombDestroyed -= FindBombTargets; 
     }
 
-    private void RegisterPowerUp(PowerUp powerUp)
+    private void RegisterPowerUp(Tetramino newTetramino)
     {
-        if (powerUp.PowerUpID == 0) 
+        if (newTetramino is PowerUp)
         {
-            _bombBlock = (BombBlock)powerUp.GetBlocks()[0];
+            if(newTetramino.GetBlocks()[0] is BombBlock)
+            _bombBlock = (BombBlock)newTetramino.GetBlocks()[0];
             _bombBlock.OnBombDestroyed += FindBombTargets;
-            Debug.Log("registered bomb: " + _bombBlock.name);
         }
-        //if(powerUpIndex == 1) 
     }
 
-    private void FindBombTargets()//(Vector3 bombPosition)
-    {                        
+    private void FindBombTargets(Vector3 bombPosition)
+    {
         Debug.Log("finding bomb targets");
-        //int bombRange = 1;
-        //for (int x = -bombRange; x <= bombRange; x++)
-        //{
-        //    for (int y = -bombRange; y <= bombRange; y++)
-        //    {
-        //        Vector3 coordinatesToCheck = new Vector3(bombPosition.x + x, bombPosition.y + y);
-        //        _bombCosualties.Add(coordinatesToCheck);
-        //    }
-        //}
+        int bombRange = 1;
+        for (int x = -bombRange; x <= bombRange; x++)
+        {
+            for (int y = -bombRange; y <= bombRange; y++)
+            {
+                Vector3 coordinatesToCheck = new Vector3(bombPosition.x + x, bombPosition.y + y);
+                _bombCosualties.Add(coordinatesToCheck);
+            }
+        }
     }
 
     private void DestroyBombTargets()
     {
         if (_bombCosualties.Count <= 0) return;
         OnDestroyBombTargets?.Invoke(_bombCosualties);
-        _bombCosualties.Clear();
+        _bombCosualties.Clear();        
     }
 }

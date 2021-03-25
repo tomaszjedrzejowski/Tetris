@@ -28,7 +28,7 @@ public class Block : MonoBehaviour
         Vector3 newPosition = transform.position + direction;
         return newPosition;
     }
-    public void MoveBlock(Vector3 newPosition)
+    public virtual void MoveBlock(Vector3 newPosition)
     {
         transform.position = newPosition;
         WidthPosition = Mathf.RoundToInt(newPosition.x);
