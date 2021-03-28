@@ -6,7 +6,7 @@ using UnityEngine;
 public class TetraminoController : MonoBehaviour
 {
     public Action<TetraminoMoveInstance> OnTryMovement;
-    public Action<List<Block>> OnTetraminoDestroyed;
+    public Action<List<Block>> OnSettleDownTetramino;
     public Action OnReachedTopRow;
 
     [SerializeField] private GridController gridController;
@@ -15,14 +15,14 @@ public class TetraminoController : MonoBehaviour
     
     private Tetramino _activeTetramino;
     private int _rotationAttempt = 0;
-    private bool _isActive = false;        
+    private bool _isActive = false;
 
     private void Start()
     {
         gridController.OnValidMove += HandleValidMove;
         gridController.OnInvalidMove += HandleInvalidMove;
         tetraminoSpawner.OnTetraminoSpawn += HandleNewTetramino;
-        gameControlller.OnTimeOut += TetraminoFall;
+        gameControlller.OnFallTetramino += TetraminoFall;
         gameControlller.OnGameOver += HandleGameOver;
     }
 
@@ -32,7 +32,7 @@ public class TetraminoController : MonoBehaviour
         gridController.OnValidMove -= HandleValidMove;
         gridController.OnInvalidMove -= HandleInvalidMove;
         tetraminoSpawner.OnTetraminoSpawn -= HandleNewTetramino;
-        gameControlller.OnTimeOut -= TetraminoFall;
+        gameControlller.OnFallTetramino -= TetraminoFall;
         gameControlller.OnGameOver -= HandleGameOver;
     }
 
@@ -69,11 +69,23 @@ public class TetraminoController : MonoBehaviour
         }
     }
 
-    public void StartTetraminoGame()
+    public void StartTetraminoFlow()
     {
-        tetraminoSpawner.CreateRandomPool();
-        tetraminoSpawner.SpawnTetramino();
+        tetraminoSpawner.CreatePool();
+        tetraminoSpawner.RandomizePool();
+        tetraminoSpawner.SelectActiveTetramino();
         _isActive = true;
+    }
+
+    public void StopTetraminoFlow()
+    {
+        _isActive = false;
+        _activeTetramino.DestroyTetramino();
+    }
+
+    public void SetActive(bool isActive)
+    {
+        _isActive = isActive;
     }
 
     private void HandleGameOver()
@@ -121,9 +133,9 @@ public class TetraminoController : MonoBehaviour
     private void SettleDownTetramino()
     {
         List<Block> blocksToGrid = _activeTetramino.GetBlocks();
-        OnTetraminoDestroyed?.Invoke(blocksToGrid);
+        OnSettleDownTetramino?.Invoke(blocksToGrid);
         _activeTetramino.DestroyTetramino();
-        tetraminoSpawner.SpawnTetramino();
+        tetraminoSpawner.SelectActiveTetramino();
     }    
 }
 

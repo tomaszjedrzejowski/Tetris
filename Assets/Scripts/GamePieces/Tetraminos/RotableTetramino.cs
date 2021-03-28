@@ -16,23 +16,22 @@ public class RotableTetramino : Tetramino, IRotate
                                                                 {new Vector3(0, -2), new Vector3(0, 2), new Vector3(0, -2), new Vector3(0, 2) },
                                                                 {new Vector3(-1, -2), new Vector3(1, 2), new Vector3(1, -2), new Vector3(-1, 2) } };
 
-    public override void Start()
+    public override void Awake()
     {
         _rotationState = rotationState.spwan;
         RotationStateID = (int)_rotationState;
         PivotBlock = pivotBlock;
-        base.Start();
+        base.Awake();
     }
     public List<Vector3> CalculateRotation(int testNumber)
     {        
         int rotationState = RotationStateID;
-        int tetraminoID = TetraminoID;
         List<Vector3> positionsToCheck = new List<Vector3>();
 
         foreach (var item in GetBlocks())
         {
             Vector3 desiredPosition = item.CalculateClockwiseRotationPosition(PivotBlock.transform);            
-            desiredPosition = ApplyWallKick(desiredPosition, tetraminoID, rotationState, testNumber);
+            desiredPosition = ApplyWallKick(desiredPosition, rotationState, testNumber);
             positionsToCheck.Add(desiredPosition);
         }
         return positionsToCheck;
@@ -46,7 +45,7 @@ public class RotableTetramino : Tetramino, IRotate
         RotationStateID = (int)_rotationState;
     }
 
-    public Vector3 ApplyWallKick(Vector3 desiredPosition, int tetraminoID, int rotationID, int testNumber)
+    public Vector3 ApplyWallKick(Vector3 desiredPosition, int rotationID, int testNumber)
     {
         int _rotationAttempt = testNumber;
         Vector3 wallKickedPosition;

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 945501746720041310}
   - component: {fileID: 945501746720041309}
-  - component: {fileID: 489509790716030833}
+  - component: {fileID: 5071293025630896128}
   m_Layer: 0
-  m_Name: block
+  m_Name: FillerBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: deb315186771a114ca4de4322880e8ba, type: 3}
-  m_Color: {r: 0.33962262, g: 0.10412958, b: 0.10412958, a: 1}
+  m_Color: {r: 0.09789959, g: 0.8301887, b: 0.7091333, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &489509790716030833
+--- !u!114 &5071293025630896128
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 945501746720041311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a1258562f0ea254b973caf4f582ad33, type: 3}
+  m_Script: {fileID: 11500000, guid: 775fbc4d250876c4482940cc8363846c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &945501747712114530
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 945501747712114528}
   - component: {fileID: 4816818566137275075}
   m_Layer: 0
-  m_Name: Bomb
+  m_Name: Filler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,7 +119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945501747712114530}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 20, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 945501746720041310}
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24198b72aadf7fa41b67dffdf64d6372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetraminoIcon: {fileID: 21300000, guid: 3a00b63dfa663d449a6b7be3031602b9, type: 3}
+  tetraminoIcon: {fileID: 21300000, guid: 1acdce534fe4a364dab663919dbfa10e, type: 3}
   spawnPosition: {x: 5, y: 20, z: 0}
   myBlocks:
-  - {fileID: 489509790716030833}
+  - {fileID: 5071293025630896128}

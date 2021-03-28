@@ -5,45 +5,56 @@ using System.Collections.Generic;
 
 public class PowerUpController : MonoBehaviour
 {
-    public Action<List<Vector3>> OnDestroyBombTargets;
+    public Action<List<Vector3>> OnBombTrigger;
+    public Action<Block> OnFillerTrigger;
 
     [SerializeField] private GridController gridController;
     [SerializeField] private TetraminoSpawner tetraminoSpawner;
+    [SerializeField] private TetraminoController tetraminoController;
 
     private List<Vector3> _bombCosualties = new List<Vector3>();
     private BombBlock _bombBlock;
-    private Block _fillBlock;
+    private Block _fillerBlock;
 
     private void Start()
     {
         tetraminoSpawner.OnTetraminoSpawn += RegisterPowerUp;
+        tetraminoController.OnSettleDownTetramino += ContinueFillerMove;
         gridController.OnLineCleanUpEnd += DestroyBombTargets;
-    }
-
-    private void OnDisable()
-    {
-        _bombBlock.OnBombDestroyed -= FindBombTargets; 
     }
 
     private void RegisterPowerUp(Tetramino newTetramino)
     {
         if (newTetramino is PowerUp)
         {
-            if(newTetramino.GetBlocks()[0] is BombBlock)
-            _bombBlock = (BombBlock)newTetramino.GetBlocks()[0];
-            _bombBlock.OnBombDestroyed += FindBombTargets;
+            var powerUpBlock = newTetramino.GetBlocks()[0];
+            if (powerUpBlock is BombBlock)
+            {
+                _bombBlock = (BombBlock)powerUpBlock;
+                _bombBlock.OnBombDestroyed += FindBombTargets;
+            }
+            else if (powerUpBlock is FillerBlock)
+            {               
+                _fillerBlock = (FillerBlock)powerUpBlock;
+            }
         }
     }
 
-    private void FindBombTargets(Vector3 bombPosition)
+    private void ContinueFillerMove(List<Block> blocks)
     {
-        Debug.Log("finding bomb targets");
-        int bombRange = 1;
-        for (int x = -bombRange; x <= bombRange; x++)
+        if(_fillerBlock != null)
         {
-            for (int y = -bombRange; y <= bombRange; y++)
+            OnFillerTrigger?.Invoke(_fillerBlock);
+        } 
+    }
+
+    private void FindBombTargets(Vector3 position, int range)
+    {
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = -range; y <= range; y++)
             {
-                Vector3 coordinatesToCheck = new Vector3(bombPosition.x + x, bombPosition.y + y);
+                Vector3 coordinatesToCheck = new Vector3(position.x + x, position.y + y);
                 _bombCosualties.Add(coordinatesToCheck);
             }
         }
@@ -52,7 +63,8 @@ public class PowerUpController : MonoBehaviour
     private void DestroyBombTargets()
     {
         if (_bombCosualties.Count <= 0) return;
-        OnDestroyBombTargets?.Invoke(_bombCosualties);
-        _bombCosualties.Clear();        
+        OnBombTrigger?.Invoke(_bombCosualties);
+        _bombCosualties.Clear();
+        _bombBlock.OnBombDestroyed -= FindBombTargets;
     }
 }

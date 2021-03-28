@@ -16,12 +16,12 @@ public class WideTetramino : Tetramino, IRotate
                                                                         {new Vector3(-2, -1), new Vector3(-1, 2), new Vector3(2, 1), new Vector3(1, -2) },
                                                                         {new Vector3(1, 2), new Vector3(2, -1), new Vector3(-1, -2), new Vector3(-2, 1) } };
 
-    public override void Start()
+    public override void Awake()
     {
         _rotationState = rotationState.spwan;
         RotationStateID = (int)_rotationState;
         PivotBlock = pivotBlock;
-        base.Start();
+        base.Awake();
     }
     public List<Vector3> CalculateRotation(int testNumber)
     {

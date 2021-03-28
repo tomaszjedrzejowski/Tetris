@@ -8,6 +8,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;    
     [SerializeField] private TetraminoController tetraminoController;
     [SerializeField] private TetraminoSpawner spawner;
+    [SerializeField] private List<PowerUpButton> powerUpsButtons;
 
     private void Start()
     {        
@@ -16,6 +17,10 @@ public class InputController : MonoBehaviour
         playerInput.OnMoveDownInput += HandleMoveDownInput;
         playerInput.OnRotateInput += HandleRotateInput;
         playerInput.OnPowerUpInput += HandlePowerUpInput;
+        foreach (var button in powerUpsButtons)
+        {
+            button.OnActivePowerUp += HandlePowerUpActivation;
+        }
     }
 
     private void OnDisable()
@@ -25,9 +30,18 @@ public class InputController : MonoBehaviour
         playerInput.OnMoveDownInput -= HandleMoveDownInput;
         playerInput.OnRotateInput -= HandleRotateInput;
         playerInput.OnPowerUpInput -= HandlePowerUpInput;
+        foreach (var button in powerUpsButtons)
+        {
+            button.OnActivePowerUp -= HandlePowerUpActivation;
+        }
     }
 
-    private void HandlePowerUpInput(int powerUpIndex)
+    private void HandlePowerUpInput(int buttonIndex)
+    {
+        powerUpsButtons[buttonIndex].ActivatePowerUp();
+    }
+
+    private void HandlePowerUpActivation(int powerUpIndex)
     {
         spawner.AddPowerUpToPool(powerUpIndex);
     }

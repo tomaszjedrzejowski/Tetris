@@ -423,12 +423,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a2dcca704005e4418df6e12dacc01d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tetraminoIcon: {fileID: 21300000, guid: f07648c98f02af2469e489aac12b45d5, type: 3}
   tetraminoID: 0
   spawnPosition: {x: 4, y: 21, z: 0}
-  blockPrefab: {fileID: 0}
-  pivotBlock: {fileID: 6783481218692217791}
   myBlocks:
   - {fileID: 6783481218653876157}
   - {fileID: 6783481218692217791}
   - {fileID: 6783481217930043790}
   - {fileID: 6783481219100480791}
+  pivotBlock: {fileID: 6783481218692217791}

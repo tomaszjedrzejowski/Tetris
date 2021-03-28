@@ -4,13 +4,14 @@ using UnityEngine;
 using System;
 
 public class BombBlock : Block
-{
-    //public Action<Vector3> OnBombDestroyed;
-    public Action<Vector3> OnBombDestroyed;
+{    
+    public Action<Vector3, int> OnBombDestroyed;
+
+    [SerializeField] private int bombRange = 1;
     
     public override void DestroyBlock()
     {
-        OnBombDestroyed?.Invoke(transform.position);
+        OnBombDestroyed?.Invoke(transform.position, bombRange);
         base.DestroyBlock();
     }
 }

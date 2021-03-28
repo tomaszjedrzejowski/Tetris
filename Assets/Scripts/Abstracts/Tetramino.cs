@@ -5,23 +5,31 @@ using System;
 
 public abstract class Tetramino : MonoBehaviour
 {
-    
-    public int TetraminoID { get; private set; }   
-    
-    [SerializeField] private int tetraminoID;
+    [SerializeField] private Sprite tetraminoIcon;
     [SerializeField] private Vector3 spawnPosition;
     [SerializeField] private List<Block> myBlocks = new List<Block>();
        
     
 
-    public virtual void Start()
+    public virtual void Awake()
     {
-        TetraminoID = tetraminoID;
+        ShowBlocks(false);
     }
+
+    private void ShowBlocks(bool isEnabled)
+    {       
+        foreach (var block  in myBlocks)
+        {
+            var blockRenderer = block.GetComponent<SpriteRenderer>();
+            blockRenderer.enabled = isEnabled;
+        }
+    }
+
     public void SetOnStartPosition()
     {
         transform.position = spawnPosition;
-    }    
+        ShowBlocks(true);
+    }
 
     public virtual List<Vector3> CalculateMove(Vector3 direction)
     {
@@ -45,6 +53,11 @@ public abstract class Tetramino : MonoBehaviour
     public virtual List<Block> GetBlocks()
     {
         return myBlocks;
+    }
+
+    public Sprite GetSprite()
+    {
+        return tetraminoIcon;
     }
 
     public void DestroyTetramino()

@@ -23,16 +23,17 @@ public class GridController : MonoBehaviour
         _gameGrid = _grid.GetGameGrid();
 
         tetraminoController.OnTryMovement += ValidateMove;
-        tetraminoController.OnTetraminoDestroyed += HandleDestroyedTetramino;
-        powerUpController.OnDestroyBombTargets += HandleBombTargets;
+        tetraminoController.OnSettleDownTetramino += HandleSettleDownTetramino;
+        powerUpController.OnBombTrigger += HandleBombTrigger;
+        powerUpController.OnFillerTrigger += HandleFillerTrigger;
     }
 
     private void OnDisable()
     {
         tetraminoController.OnTryMovement -= ValidateMove;
-        tetraminoController.OnTetraminoDestroyed -= HandleDestroyedTetramino;
+        tetraminoController.OnSettleDownTetramino -= HandleSettleDownTetramino;
     }   
-    private void HandleDestroyedTetramino(List<Block> tetraminosToGrid)
+    private void HandleSettleDownTetramino(List<Block> tetraminosToGrid)
     {
         List<int> removedLine = new List<int>();
         foreach (var block in tetraminosToGrid)
@@ -58,7 +59,7 @@ public class GridController : MonoBehaviour
         OnLineCleanUpEnd?.Invoke();
     }
 
-    private void HandleBombTargets(List<Vector3> bombTargets)
+    private void HandleBombTrigger(List<Vector3> bombTargets)
     {
         foreach (var vector in bombTargets)
         {
@@ -72,6 +73,19 @@ public class GridController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void HandleFillerTrigger(Block filler)
+    {
+        _grid.RemoveFromGrid(filler);
+        for (int y = filler.HeightPosition; y >= 0; y--)
+        {
+            if (_gameGrid[filler.WidthPosition, y] == null) 
+            {
+                filler.MoveBlock(new Vector3(filler.WidthPosition, y));
+            }
+        }
+        _grid.AddToGrid(filler);
     }
 
     private void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)
@@ -92,7 +106,7 @@ public class GridController : MonoBehaviour
         }
         else OnInvalidMove?.Invoke(tetraminoMoveInstance);
     }
-        // lines clean up and row adjustment //
+     
     private List<int> LineCompletitionCheck()
     {        
         List<int> completedLines = new List<int>();
@@ -158,5 +172,17 @@ public class GridController : MonoBehaviour
             block.DestroyBlock();
         }
         OnLineCompleted?.Invoke();
+    }
+
+    public void ClearGrid()
+    {
+        foreach (var item in _gameGrid)
+        {
+            if (item != null)
+            {
+                _grid.RemoveFromGrid(item);
+                item.DestroyBlock();
+            }
+        }
     }
 }
