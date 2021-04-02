@@ -15,7 +15,6 @@ public class TetraminoSpawner : MonoBehaviour
     private List<Tetramino> _randomizedPool = new List<Tetramino>();
     private Tetramino currentTetramino;
     private Tetramino _nextTetramino;
-    private bool _isActive;
 
     public void SelectActiveTetramino()
     {
@@ -50,7 +49,6 @@ public class TetraminoSpawner : MonoBehaviour
 
     public void AddPowerUpToPool( int powerUpIndex) 
     {
-        if (!_isActive) return;
         var newPowerUp = Instantiate(powerUpPool[powerUpIndex]);
         _randomizedPool.Insert(0,newPowerUp); 
         OnNextTetraminoSelect?.Invoke(newPowerUp);
