@@ -23,6 +23,13 @@ public class PowerUpController : MonoBehaviour
         gridController.OnLineCleanUpEnd += DestroyBombTargets;
     }
 
+    private void OnDisable()
+    {
+        tetraminoSpawner.OnTetraminoSpawn -= RegisterPowerUp;
+        tetraminoController.OnSettleDownTetramino -= ContinueFillerMove;
+        gridController.OnLineCleanUpEnd -= DestroyBombTargets;
+    }
+
     private void RegisterPowerUp(Tetramino newTetramino)
     {
         if (newTetramino is PowerUp)
