@@ -23,14 +23,14 @@ public class UIController : MonoBehaviour
 
     private void Start()
     { 
-        spawner.OnNextTetraminoSelect += HandleTetraminoListUpdate;
+        spawner.onNextTetraminoSelect += HandleTetraminoListUpdate;
         _startButtonTextComponnent = startButton.GetComponentInChildren<Text>();
         SetPopUpActive(gameOverPopUp, false);
     }
 
     private void OnDisable()
     {
-        spawner.OnNextTetraminoSelect -= HandleTetraminoListUpdate;
+        spawner.onNextTetraminoSelect -= HandleTetraminoListUpdate;
     }
 
     public void SetGameloopActiveFlag(bool isActive)

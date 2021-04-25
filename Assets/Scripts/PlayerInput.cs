@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public Action OnMoveLeftInput;
-    public Action OnMoveRightInput;
-    public Action OnMoveDownInput;
-    public Action OnRotateInput;
-    public Action<int> OnPowerUpInput;
+    public Action onMoveLeftInput;
+    public Action onMoveRightInput;
+    public Action onMoveDownInput;
+    public Action onRotateInput;
+    public Action<int> onPowerUpInput;
 
     private readonly KeyCode moveRightMainKey = KeyCode.D;
     private readonly KeyCode moveRightAlternativeKey = KeyCode.RightArrow;
@@ -31,27 +31,27 @@ public class PlayerInput : MonoBehaviour
     {
         if(Input.GetKeyDown(moveRightMainKey) || Input.GetKeyDown(moveRightAlternativeKey))
         {
-            OnMoveRightInput?.Invoke();
+            onMoveRightInput?.Invoke();
         }
         else if (Input.GetKeyDown(moveLeftMainKey) || Input.GetKeyDown(moveLeftAlternativeKey))
         {
-            OnMoveLeftInput?.Invoke();
+            onMoveLeftInput?.Invoke();
         }
         else if(Input.GetKeyDown(moveDownMainKey) || Input.GetKeyDown(moveDownAlternativeKey))
         {
-            OnMoveDownInput?.Invoke();
+            onMoveDownInput?.Invoke();
         }
         else if(Input.GetKeyDown(rotateMainKey) || Input.GetKeyDown(rotateAlternativeKey))
         {
-            OnRotateInput?.Invoke();
+            onRotateInput?.Invoke();
         }
         else if (Input.GetKeyDown(powerUp1MainKey))
         {
-            OnPowerUpInput?.Invoke(0);
+            onPowerUpInput?.Invoke(0);
         }
         else if (Input.GetKeyDown(powerUp2MainKey))
         {
-            OnPowerUpInput?.Invoke(1);
+            onPowerUpInput?.Invoke(1);
         }
     }
 }

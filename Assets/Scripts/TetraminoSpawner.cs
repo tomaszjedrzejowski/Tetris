@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TetraminoSpawner : MonoBehaviour
 {
-    public Action<Tetramino> OnTetraminoSpawn;
-    public Action<Tetramino> OnNextTetraminoSelect;    
+    public Action<Tetramino> onTetraminoSpawn;
+    public Action<Tetramino> onNextTetraminoSelect;    
 
     [SerializeField] private List<Tetramino> tetraminoPool = new List<Tetramino>();
     [SerializeField] private List<PowerUp> powerUpPool = new List<PowerUp>();    
@@ -21,8 +21,8 @@ public class TetraminoSpawner : MonoBehaviour
         currentTetramino = _randomizedPool[0];
         _nextTetramino = _randomizedPool[1];
         _randomizedPool.Remove(_randomizedPool[0]);
-        OnNextTetraminoSelect?.Invoke(_nextTetramino);
-        OnTetraminoSpawn?.Invoke(currentTetramino);
+        onNextTetraminoSelect?.Invoke(_nextTetramino);
+        onTetraminoSpawn?.Invoke(currentTetramino);
     }
 
     public void RandomizePool()
@@ -50,7 +50,7 @@ public class TetraminoSpawner : MonoBehaviour
     {
         var newPowerUp = Instantiate(powerUpPool[powerUpIndex]);
         _randomizedPool.Insert(0,newPowerUp); 
-        OnNextTetraminoSelect?.Invoke(newPowerUp);
+        onNextTetraminoSelect?.Invoke(newPowerUp);
     }
 
     public void ClearSpawner()

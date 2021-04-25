@@ -12,27 +12,27 @@ public class InputController : MonoBehaviour
 
     private void Start()
     {        
-        playerInput.OnMoveRightInput += HandleMoveRightInput;
-        playerInput.OnMoveLeftInput += HandleMoveLeftInput;
-        playerInput.OnMoveDownInput += HandleMoveDownInput;
-        playerInput.OnRotateInput += HandleRotateInput;
-        playerInput.OnPowerUpInput += HandlePowerUpInput;
+        playerInput.onMoveRightInput += HandleMoveRightInput;
+        playerInput.onMoveLeftInput += HandleMoveLeftInput;
+        playerInput.onMoveDownInput += HandleMoveDownInput;
+        playerInput.onRotateInput += HandleRotateInput;
+        playerInput.onPowerUpInput += HandlePowerUpInput;
         foreach (var button in powerUpsButtons)
         {
-            button.OnActivePowerUp += HandlePowerUpActivation;
+            button.onActivePowerUp += HandlePowerUpActivation;
         }
     }
 
     private void OnDisable()
     {
-        playerInput.OnMoveRightInput -= HandleMoveRightInput;
-        playerInput.OnMoveLeftInput -= HandleMoveLeftInput;
-        playerInput.OnMoveDownInput -= HandleMoveDownInput;
-        playerInput.OnRotateInput -= HandleRotateInput;
-        playerInput.OnPowerUpInput -= HandlePowerUpInput;
+        playerInput.onMoveRightInput -= HandleMoveRightInput;
+        playerInput.onMoveLeftInput -= HandleMoveLeftInput;
+        playerInput.onMoveDownInput -= HandleMoveDownInput;
+        playerInput.onRotateInput -= HandleRotateInput;
+        playerInput.onPowerUpInput -= HandlePowerUpInput;
         foreach (var button in powerUpsButtons)
         {
-            button.OnActivePowerUp -= HandlePowerUpActivation;
+            button.onActivePowerUp -= HandlePowerUpActivation;
         }
     }
 

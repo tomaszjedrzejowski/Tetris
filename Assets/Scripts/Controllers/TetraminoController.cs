@@ -17,13 +17,13 @@ public class TetraminoController : MonoBehaviour
 
     private void Start()
     {
-        tetraminoSpawner.OnTetraminoSpawn += HandleNewTetramino;
+        tetraminoSpawner.onTetraminoSpawn += HandleNewTetramino;
     }
 
 
     private void OnDisable()
     {
-        tetraminoSpawner.OnTetraminoSpawn -= HandleNewTetramino;
+        tetraminoSpawner.onTetraminoSpawn -= HandleNewTetramino;
     }
 
     public void TryRotate()

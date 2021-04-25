@@ -7,9 +7,7 @@ public abstract class Tetramino : MonoBehaviour
 {
     [SerializeField] private Sprite tetraminoIcon;
     [SerializeField] private Vector3 spawnPosition;
-    [SerializeField] private List<Block> myBlocks = new List<Block>();
-       
-    
+    [SerializeField] private List<Block> myBlocks = new List<Block>();    
 
     public virtual void Awake()
     {

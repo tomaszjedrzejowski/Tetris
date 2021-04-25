@@ -20,7 +20,7 @@ public class PowerUpController : MonoBehaviour
             if (powerUpBlock is BombBlock)
             {
                 _bombBlock = (BombBlock)powerUpBlock;
-                _bombBlock.OnBombDestroyed += FindBombTargets;
+                _bombBlock.onBombDestroyed += FindBombTargets;
             }
             else if (powerUpBlock is FillerBlock)
             {               
@@ -55,6 +55,6 @@ public class PowerUpController : MonoBehaviour
         if (_bombCosualties.Count <= 0) return;
         onBombTrigger?.Invoke(_bombCosualties);
         _bombCosualties.Clear();
-        _bombBlock.OnBombDestroyed -= FindBombTargets;
+        _bombBlock.onBombDestroyed -= FindBombTargets;
     }
 }

@@ -5,13 +5,13 @@ using System;
 
 public class BombBlock : Block
 {    
-    public Action<Vector3, int> OnBombDestroyed;
+    public Action<Vector3, int> onBombDestroyed;
 
     [SerializeField] private int bombRange = 1;
     
     public override void DestroyBlock()
     {
-        OnBombDestroyed?.Invoke(transform.position, bombRange);
+        onBombDestroyed?.Invoke(transform.position, bombRange);
         base.DestroyBlock();
     }
 }

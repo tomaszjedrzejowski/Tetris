@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    public Action OnTimeOut;
+    public Action onTimeOut;
 
     public float CountDownTime { get; set; }
     public bool IsContinuous { get; set; }
@@ -28,7 +28,7 @@ public class Timer : MonoBehaviour
         _currentTime -= Time.deltaTime;
         if (_currentTime <= 0)
         {
-            OnTimeOut?.Invoke();
+            onTimeOut?.Invoke();
             SetTimer();
             if(!IsContinuous) SetActive(false);
         }

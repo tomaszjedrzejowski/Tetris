@@ -33,14 +33,14 @@ public class GameController : MonoBehaviour
         uIController.onRestartClick -= RestratGameLoop;
         gridController.onLineCompleted -= HandleLineCompleated;
         gridController.onLastRowReached -= HandleLastRowReached;
-        _fallTimer.OnTimeOut -= tetraminoController.TetraminoFall;
+        _fallTimer.onTimeOut -= tetraminoController.TetraminoFall;
     }
     private void SetFallTimer()
     {
         _fallTimer = Instantiate(timerPrefab, this.transform);
         _fallTimer.CountDownTime = _fallTime;
         _fallTimer.IsContinuous = true;
-        _fallTimer.OnTimeOut += tetraminoController.TetraminoFall;
+        _fallTimer.onTimeOut += tetraminoController.TetraminoFall;
     }
 
     private void StartGameLoop()

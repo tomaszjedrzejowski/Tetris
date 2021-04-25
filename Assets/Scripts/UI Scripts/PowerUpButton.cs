@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PowerUpButton : MonoBehaviour
 {
-    public Action<int> OnActivePowerUp;
+    public Action<int> onActivePowerUp;
 
     [SerializeField] private int powerUpIndex;
     [SerializeField] private int powerUpCooldown;
@@ -17,19 +17,19 @@ public class PowerUpButton : MonoBehaviour
     private void Start()
     {
         _timer = Instantiate(timerPrefab, this.transform);        
-        _timer.OnTimeOut += GrantPowerUp;
+        _timer.onTimeOut += GrantPowerUp;
         _timer.CountDownTime = powerUpCooldown;
         _isAvailable = true;
     }
 
     private void OnDisable()
     {
-        _timer.OnTimeOut -= GrantPowerUp;
+        _timer.onTimeOut -= GrantPowerUp;
     }
     public void ActivatePowerUp()
     {
         if (!_isAvailable) return;
-        OnActivePowerUp?.Invoke(powerUpIndex);
+        onActivePowerUp?.Invoke(powerUpIndex);
         SetOnCooldown();
     }
 
