@@ -6,7 +6,6 @@ using UnityEngine;
 public class TetraminoSpawner : MonoBehaviour
 {
     public Action<Tetramino> OnTetraminoSpawn;
-    public Action<PowerUp> OnPowerUpAdd;
     public Action<Tetramino> OnNextTetraminoSelect;    
 
     [SerializeField] private List<Tetramino> tetraminoPool = new List<Tetramino>();

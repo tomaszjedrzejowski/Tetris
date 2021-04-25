@@ -5,32 +5,14 @@ using System.Collections.Generic;
 
 public class PowerUpController : MonoBehaviour
 {
-    public Action<List<Vector3>> OnBombTrigger;
-    public Action<Block> OnFillerTrigger;
-
-    [SerializeField] private GridController gridController;
-    [SerializeField] private TetraminoSpawner tetraminoSpawner;
-    [SerializeField] private TetraminoController tetraminoController;
+    public Action<List<Vector3>> onBombTrigger;
+    public Action<Block> onFillerTrigger;
 
     private List<Vector3> _bombCosualties = new List<Vector3>();
     private BombBlock _bombBlock;
     private Block _fillerBlock;
 
-    private void Start()
-    {
-        tetraminoSpawner.OnTetraminoSpawn += RegisterPowerUp;
-        tetraminoController.OnSettleDownTetramino += ContinueFillerMove;
-        gridController.OnLineCleanUpEnd += DestroyBombTargets;
-    }
-
-    private void OnDisable()
-    {
-        tetraminoSpawner.OnTetraminoSpawn -= RegisterPowerUp;
-        tetraminoController.OnSettleDownTetramino -= ContinueFillerMove;
-        gridController.OnLineCleanUpEnd -= DestroyBombTargets;
-    }
-
-    private void RegisterPowerUp(Tetramino newTetramino)
+    public void RegisterPowerUp(Tetramino newTetramino)
     {
         if (newTetramino is PowerUp)
         {
@@ -47,11 +29,12 @@ public class PowerUpController : MonoBehaviour
         }
     }
 
-    private void ContinueFillerMove(List<Block> blocks)
+    public void ContinueFillerMove()
     {
         if(_fillerBlock != null)
         {
-            OnFillerTrigger?.Invoke(_fillerBlock);
+            onFillerTrigger?.Invoke(_fillerBlock);
+            _fillerBlock = null;
         } 
     }
 
@@ -67,10 +50,10 @@ public class PowerUpController : MonoBehaviour
         }
     }
 
-    private void DestroyBombTargets()
+    public void DestroyBombTargets()
     {
         if (_bombCosualties.Count <= 0) return;
-        OnBombTrigger?.Invoke(_bombCosualties);
+        onBombTrigger?.Invoke(_bombCosualties);
         _bombCosualties.Clear();
         _bombBlock.OnBombDestroyed -= FindBombTargets;
     }

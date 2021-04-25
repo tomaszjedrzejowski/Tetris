@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class TetraminoController : MonoBehaviour
 {
-    public Action<TetraminoMoveInstance> OnTryMovement;
-    public Action<List<Block>> OnSettleDownTetramino;
-    public Action OnReachedTopRow;
-
-    [SerializeField] private GridController gridController;
+    public Action<TetraminoMoveInstance> onTryMovement;
+    public Action<List<Block>> onSettleDownTetramino;
+        
     [SerializeField] private TetraminoSpawner tetraminoSpawner;
-    [SerializeField] private GameController gameControlller;
+    [SerializeField] private PowerUpController powerUpController;
     
     private Tetramino _activeTetramino;
     private int _rotationAttempt = 0;
@@ -19,21 +17,13 @@ public class TetraminoController : MonoBehaviour
 
     private void Start()
     {
-        gridController.OnValidMove += HandleValidMove;
-        gridController.OnInvalidMove += HandleInvalidMove;
         tetraminoSpawner.OnTetraminoSpawn += HandleNewTetramino;
-        gameControlller.OnFallTetramino += TetraminoFall;
-        gameControlller.OnGameOver += HandleGameOver;
     }
 
 
     private void OnDisable()
     {
-        gridController.OnValidMove -= HandleValidMove;
-        gridController.OnInvalidMove -= HandleInvalidMove;
         tetraminoSpawner.OnTetraminoSpawn -= HandleNewTetramino;
-        gameControlller.OnFallTetramino -= TetraminoFall;
-        gameControlller.OnGameOver -= HandleGameOver;
     }
 
     public void TryRotate()
@@ -45,7 +35,7 @@ public class TetraminoController : MonoBehaviour
             {               
                 var positionsToCheck = ((IRotate)_activeTetramino).CalculateRotation(_rotationAttempt);
                 TetraminoMoveInstance tetraminoMoveInstance = new TetraminoMoveInstance(positionsToCheck, true);
-                OnTryMovement?.Invoke(tetraminoMoveInstance);
+                onTryMovement?.Invoke(tetraminoMoveInstance);
             }
         }
         catch(NullReferenceException)
@@ -61,7 +51,7 @@ public class TetraminoController : MonoBehaviour
             List<Vector3> positionsToCheck = new List<Vector3>();
             positionsToCheck = _activeTetramino.CalculateMove(direction);
             TetraminoMoveInstance tetraminoMoveInstance = new TetraminoMoveInstance(positionsToCheck, direction);
-            OnTryMovement?.Invoke(tetraminoMoveInstance);
+            onTryMovement?.Invoke(tetraminoMoveInstance);
         }
         catch(NullReferenceException)
         {
@@ -88,12 +78,12 @@ public class TetraminoController : MonoBehaviour
         _isActive = isActive;
     }
 
-    private void HandleGameOver()
+    public void HandleGameOver()
     {
         _isActive = false;
     }
 
-    private void TetraminoFall()
+    public void TetraminoFall()
     {
         if (!_isActive) return;
         TryMove(Vector3.down);
@@ -103,9 +93,10 @@ public class TetraminoController : MonoBehaviour
     {
         _activeTetramino = newTetramino;
         _activeTetramino.SetOnStartPosition();
+        powerUpController.RegisterPowerUp(newTetramino);
     }
 
-    private void HandleValidMove(TetraminoMoveInstance tetraminoMoveInstance)
+    public void HandleValidMove(TetraminoMoveInstance tetraminoMoveInstance)
     {
         _activeTetramino.MoveTetramino(tetraminoMoveInstance.GetDesiredPositions());
         if (tetraminoMoveInstance.GetIsRotation() && _activeTetramino is IRotate)
@@ -115,7 +106,7 @@ public class TetraminoController : MonoBehaviour
         }        
     }
 
-    private void HandleInvalidMove(TetraminoMoveInstance tetraminoMoveInstance)
+    public void HandleInvalidMove(TetraminoMoveInstance tetraminoMoveInstance)
     {
         if (tetraminoMoveInstance.GetIsRotation() && _rotationAttempt < 4)
         {
@@ -133,7 +124,8 @@ public class TetraminoController : MonoBehaviour
     private void SettleDownTetramino()
     {
         List<Block> blocksToGrid = _activeTetramino.GetBlocks();
-        OnSettleDownTetramino?.Invoke(blocksToGrid);
+        onSettleDownTetramino?.Invoke(blocksToGrid);
+        powerUpController.ContinueFillerMove();
         _activeTetramino.DestroyTetramino();
         tetraminoSpawner.SelectActiveTetramino();
     }    

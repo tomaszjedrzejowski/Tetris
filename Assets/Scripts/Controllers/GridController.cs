@@ -5,11 +5,8 @@ using UnityEngine;
 
 public class GridController : MonoBehaviour
 {
-    public Action<TetraminoMoveInstance> OnValidMove;
-    public Action<TetraminoMoveInstance> OnInvalidMove;
-    public Action<bool> OnLastRowReached;
-    public Action OnLineCompleted;
-    public Action OnLineCleanUpEnd;
+    public Action<bool> onLastRowReached;
+    public Action onLineCompleted;
 
     [SerializeField] private TetraminoController tetraminoController;
     [SerializeField] private PowerUpController powerUpController;
@@ -22,16 +19,18 @@ public class GridController : MonoBehaviour
         _grid = new BoardGrid();
         _gameGrid = _grid.GetGameGrid();
 
-        tetraminoController.OnTryMovement += ValidateMove;
-        tetraminoController.OnSettleDownTetramino += HandleSettleDownTetramino;
-        powerUpController.OnBombTrigger += HandleBombTrigger;
-        powerUpController.OnFillerTrigger += HandleFillerTrigger;
+        tetraminoController.onTryMovement += ValidateMove;
+        tetraminoController.onSettleDownTetramino += HandleSettleDownTetramino;
+        powerUpController.onBombTrigger += HandleBombTrigger;
+        powerUpController.onFillerTrigger += HandleFillerTrigger;
     }
 
     private void OnDisable()
     {
-        tetraminoController.OnTryMovement -= ValidateMove;
-        tetraminoController.OnSettleDownTetramino -= HandleSettleDownTetramino;
+        tetraminoController.onTryMovement -= ValidateMove;
+        tetraminoController.onSettleDownTetramino -= HandleSettleDownTetramino;
+        powerUpController.onBombTrigger -= HandleBombTrigger;
+        powerUpController.onFillerTrigger -= HandleFillerTrigger;
     }   
     private void HandleSettleDownTetramino(List<Block> tetraminosToGrid)
     {
@@ -42,7 +41,7 @@ public class GridController : MonoBehaviour
             block.transform.parent = this.transform;
         }
         GridCleanUp();
-        OnLastRowReached?.Invoke(ChcekHeighestLine());
+        onLastRowReached?.Invoke(ChcekHeighestLine());
     }    
 
     private void GridCleanUp()
@@ -56,7 +55,7 @@ public class GridController : MonoBehaviour
             GridCleanUp();            
         }
         else return;
-        OnLineCleanUpEnd?.Invoke();
+        powerUpController.DestroyBombTargets();
     }
 
     private void HandleBombTrigger(List<Vector3> bombTargets)
@@ -102,9 +101,9 @@ public class GridController : MonoBehaviour
         }
         if (isValid)
         {
-            OnValidMove?.Invoke(tetraminoMoveInstance);
+            tetraminoController.HandleValidMove(tetraminoMoveInstance);
         }
-        else OnInvalidMove?.Invoke(tetraminoMoveInstance);
+        else tetraminoController.HandleInvalidMove(tetraminoMoveInstance); 
     }
      
     private List<int> LineCompletitionCheck()
@@ -171,7 +170,7 @@ public class GridController : MonoBehaviour
             _grid.RemoveFromGrid(block);
             block.DestroyBlock();
         }
-        OnLineCompleted?.Invoke();
+        onLineCompleted?.Invoke();
     }
 
     public void ClearGrid()

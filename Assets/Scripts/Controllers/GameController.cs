@@ -5,20 +5,12 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public Action OnGameOver;
-    public Action<int> OnLineCompleted;
-    public Action<int> OnLevelChange;
-    public Action OnFallTetramino;
-    public Action OnGameReset;
-
-    public bool IsGameLoopActive { get; private set; }    
-
     [SerializeField] private GridController gridController;
     [SerializeField] private TetraminoController tetraminoController;
     [SerializeField] private TetraminoSpawner tetraminoSpawner;
     [SerializeField] private UIController uIController;
-    [SerializeField] private int lineThreshold;
     [SerializeField] private Timer timerPrefab;
+    [SerializeField] private int lineThreshold;
 
     private Timer _fallTimer;
     private int _gameLevel = 0;
@@ -28,40 +20,39 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         SetFallTimer();
-        uIController.OnStartClick += StartGameLoop;
-        uIController.OnRestartClick += RestratGameLoop;
-        gridController.OnLineCompleted += HandleLineCompleated;
-        gridController.OnLastRowReached += HandleLastRowReached;
-        IsGameLoopActive = false;
+        uIController.onStartClick += StartGameLoop;
+        uIController.onRestartClick += RestratGameLoop;
+        gridController.onLineCompleted += HandleLineCompleated;
+        gridController.onLastRowReached += HandleLastRowReached;
+        uIController.SetGameloopActiveFlag(false); 
     }
-
 
     private void OnDisable()
     {
-        uIController.OnStartClick -= StartGameLoop;
-        uIController.OnRestartClick -= RestratGameLoop;
-        gridController.OnLineCompleted -= HandleLineCompleated;
-        gridController.OnLastRowReached -= HandleLastRowReached;
-        _fallTimer.OnTimeOut += () => OnFallTetramino?.Invoke();
+        uIController.onStartClick -= StartGameLoop;
+        uIController.onRestartClick -= RestratGameLoop;
+        gridController.onLineCompleted -= HandleLineCompleated;
+        gridController.onLastRowReached -= HandleLastRowReached;
+        _fallTimer.OnTimeOut -= tetraminoController.TetraminoFall;
     }
     private void SetFallTimer()
     {
         _fallTimer = Instantiate(timerPrefab, this.transform);
         _fallTimer.CountDownTime = _fallTime;
         _fallTimer.IsContinuous = true;
-        _fallTimer.OnTimeOut += () => OnFallTetramino?.Invoke();
+        _fallTimer.OnTimeOut += tetraminoController.TetraminoFall;
     }
 
     private void StartGameLoop()
     {
         tetraminoController.StartTetraminoFlow();
-        IsGameLoopActive = true;
+        uIController.SetGameloopActiveFlag(true);
         _fallTimer.SetActive(true);
     }
 
     private void RestratGameLoop()
     {
-        IsGameLoopActive = false;
+        uIController.SetGameloopActiveFlag(false);
         _fallTimer.SetActive(false);
         tetraminoController.StopTetraminoFlow();
         tetraminoSpawner.ClearSpawner();
@@ -69,7 +60,7 @@ public class GameController : MonoBehaviour
         // Clear player Points;
         _lineCompleted = 0;
         _gameLevel = 0;
-        OnGameReset?.Invoke();
+        uIController.HandleGameReset();
         
     }
 
@@ -83,10 +74,11 @@ public class GameController : MonoBehaviour
 
     private void GameOver()
     {
-        IsGameLoopActive = false;
+        uIController.SetGameloopActiveFlag(false);
         tetraminoController.StopTetraminoFlow();
         _fallTimer.SetActive(false);
-        OnGameOver?.Invoke();
+        uIController.HandleGameOver();
+        tetraminoController.HandleGameOver();
     }
 
     private void HandleLineCompleated()
@@ -96,14 +88,14 @@ public class GameController : MonoBehaviour
         {
             RiseGameLevel();
         }
-        OnLineCompleted?.Invoke(_lineCompleted);
+        uIController.HandleLineCompleted(_lineCompleted);
     }
 
     private void RiseGameLevel()
     {
         _gameLevel++;
-        _fallTime = _fallTime - 0.15f; //temp
+        _fallTime -= 0.15f; //temp
         _fallTimer.CountDownTime = _fallTime;
-        OnLevelChange?.Invoke(_gameLevel);
+        uIController.HandleLevelChange(_gameLevel);
     }
 }
