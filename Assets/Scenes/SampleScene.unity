@@ -121,6 +121,53 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &43825796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 43825797}
+  - component: {fileID: 43825798}
+  m_Layer: 0
+  m_Name: GameLoopManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &43825797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43825796}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &43825798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43825796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d569f966be03b994c917b58c1d244711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridController: {fileID: 1677778308}
+  tetraminoController: {fileID: 169170377}
+  powerUpController: {fileID: 890653694}
+  tetraminoSpawner: {fileID: 1425093373}
 --- !u!1 &57661004
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,9 +375,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368549402b7f63641a3d96a7ad54bd07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 1677778308}
-  tetraminoSpawner: {fileID: 1425093373}
-  powerUpController: {fileID: 890653694}
 --- !u!4 &169170378
 Transform:
   m_ObjectHideFlags: 0
@@ -1076,9 +1120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bd621f0fa5df945a182b340c483bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 1677778308}
-  tetraminoController: {fileID: 169170377}
-  tetraminoSpawner: {fileID: 1425093373}
+  gameLoopManager: {fileID: 43825798}
   uIController: {fileID: 1769475007}
   timerPrefab: {fileID: 1476712586910467860, guid: 5c5e4cce5520e484fb66ea75eb893db9,
     type: 3}
@@ -1126,8 +1168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e191320ce5480cb4fbc0e5966b7350ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridController: {fileID: 1677778308}
-  tetraminoController: {fileID: 169170377}
 --- !u!4 &890653695
 Transform:
   m_ObjectHideFlags: 0
@@ -1683,8 +1723,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd7bd9de540f1d6469a017abd92717c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetraminoController: {fileID: 169170377}
-  powerUpController: {fileID: 890653694}
 --- !u!4 &1677778309
 Transform:
   m_ObjectHideFlags: 0

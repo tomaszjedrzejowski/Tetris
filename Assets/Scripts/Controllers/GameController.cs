@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GridController gridController;
-    [SerializeField] private TetraminoController tetraminoController;
-    [SerializeField] private TetraminoSpawner tetraminoSpawner;
+    [SerializeField] private GameLoopManager gameLoopManager;
     [SerializeField] private UIController uIController;
     [SerializeField] private Timer timerPrefab;
     [SerializeField] private int lineThreshold;
@@ -20,43 +18,41 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         SetFallTimer();
-        uIController.onStartClick += StartGameLoop;
-        uIController.onRestartClick += RestratGameLoop;
-        gridController.onLineCompleted += HandleLineCompleated;
-        gridController.onLastRowReached += HandleLastRowReached;
+        uIController.onStartClick += OnStartClick;
+        uIController.onRestartClick += OnRestratClick;
+        gameLoopManager.onLineCompleted += OnLineCompleated;
+        gameLoopManager.onLastRowReached += OnLastRowReached;
         uIController.SetGameloopActiveFlag(false); 
     }
 
     private void OnDisable()
     {
-        uIController.onStartClick -= StartGameLoop;
-        uIController.onRestartClick -= RestratGameLoop;
-        gridController.onLineCompleted -= HandleLineCompleated;
-        gridController.onLastRowReached -= HandleLastRowReached;
-        _fallTimer.onTimeOut -= tetraminoController.TetraminoFall;
+        uIController.onStartClick -= OnStartClick;
+        uIController.onRestartClick -= OnRestratClick;
+        gameLoopManager.onLineCompleted -= OnLineCompleated;
+        gameLoopManager.onLastRowReached -= OnLastRowReached;
+        _fallTimer.onTimeOut -= gameLoopManager.TetraminoFall;
     }
     private void SetFallTimer()
     {
         _fallTimer = Instantiate(timerPrefab, this.transform);
         _fallTimer.CountDownTime = _fallTime;
         _fallTimer.IsContinuous = true;
-        _fallTimer.onTimeOut += tetraminoController.TetraminoFall;
+        _fallTimer.onTimeOut += gameLoopManager.TetraminoFall;
     }
 
-    private void StartGameLoop()
+    private void OnStartClick()
     {
-        tetraminoController.StartTetraminoFlow();
+        gameLoopManager.StartGame();
         uIController.SetGameloopActiveFlag(true);
         _fallTimer.SetActive(true);
     }
 
-    private void RestratGameLoop()
+    private void OnRestratClick()
     {
-        uIController.SetGameloopActiveFlag(false);
         _fallTimer.SetActive(false);
-        tetraminoController.StopTetraminoFlow();
-        tetraminoSpawner.ClearSpawner();
-        gridController.ClearGrid();
+        gameLoopManager.RestartGame();
+        uIController.SetGameloopActiveFlag(false);
         // Clear player Points;
         _lineCompleted = 0;
         _gameLevel = 0;
@@ -64,24 +60,18 @@ public class GameController : MonoBehaviour
         
     }
 
-    private void HandleLastRowReached(bool reachedEnd)
+    private void OnLastRowReached()
     {
-        if (reachedEnd)
-        {
-            GameOver();
-        }
+        GameOver();
     }
 
     private void GameOver()
     {
-        uIController.SetGameloopActiveFlag(false);
-        tetraminoController.StopTetraminoFlow();
         _fallTimer.SetActive(false);
         uIController.HandleGameOver();
-        tetraminoController.HandleGameOver();
     }
 
-    private void HandleLineCompleated()
+    private void OnLineCompleated()
     {
         _lineCompleted++;
         if(_lineCompleted % lineThreshold == 0)
@@ -94,7 +84,7 @@ public class GameController : MonoBehaviour
     private void RiseGameLevel()
     {
         _gameLevel++;
-        _fallTime -= 0.15f; //temp
+        _fallTime -= 0.15f;
         _fallTimer.CountDownTime = _fallTime;
         uIController.HandleLevelChange(_gameLevel);
     }

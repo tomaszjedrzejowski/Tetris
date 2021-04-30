@@ -7,9 +7,9 @@ public class GridController : MonoBehaviour
 {
     public Action<bool> onLastRowReached;
     public Action onLineCompleted;
-
-    [SerializeField] private TetraminoController tetraminoController;
-    [SerializeField] private PowerUpController powerUpController;
+    public Action onGridCleanUpEnds;
+    public Action<TetraminoMoveInstance> onValidMovement;
+    public Action<TetraminoMoveInstance> onInvalidMovement;
 
     private BoardGrid _grid;
     private Block[,] _gameGrid;    
@@ -18,21 +18,9 @@ public class GridController : MonoBehaviour
     {
         _grid = new BoardGrid();
         _gameGrid = _grid.GetGameGrid();
-
-        tetraminoController.onTryMovement += ValidateMove;
-        tetraminoController.onSettleDownTetramino += HandleSettleDownTetramino;
-        powerUpController.onBombTrigger += HandleBombTrigger;
-        powerUpController.onFillerTrigger += HandleFillerTrigger;
     }
 
-    private void OnDisable()
-    {
-        tetraminoController.onTryMovement -= ValidateMove;
-        tetraminoController.onSettleDownTetramino -= HandleSettleDownTetramino;
-        powerUpController.onBombTrigger -= HandleBombTrigger;
-        powerUpController.onFillerTrigger -= HandleFillerTrigger;
-    }   
-    private void HandleSettleDownTetramino(List<Block> tetraminosToGrid)
+    public void HandleSettleDownTetramino(List<Block> tetraminosToGrid)
     {
         List<int> removedLine = new List<int>();
         foreach (var block in tetraminosToGrid)
@@ -55,10 +43,10 @@ public class GridController : MonoBehaviour
             GridCleanUp();            
         }
         else return;
-        powerUpController.DestroyBombTargets();
+        onGridCleanUpEnds?.Invoke();
     }
 
-    private void HandleBombTrigger(List<Vector3> bombTargets)
+    public void HandleBombTrigger(List<Vector3> bombTargets)
     {
         foreach (var vector in bombTargets)
         {
@@ -74,7 +62,7 @@ public class GridController : MonoBehaviour
         }
     }
 
-    private void HandleFillerTrigger(Block filler)
+    public void HandleFillerTrigger(Block filler)
     {
         _grid.RemoveFromGrid(filler);
         for (int y = filler.HeightPosition; y >= 0; y--)
@@ -85,9 +73,12 @@ public class GridController : MonoBehaviour
             }
         }
         _grid.AddToGrid(filler);
+        // fix - not :P
+        GridCleanUp();
+        onLastRowReached?.Invoke(ChcekHeighestLine());
     }
 
-    private void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)
+    public void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)
     {       
         bool isValid = false;
         foreach (var item in tetraminoMoveInstance.GetDesiredPositions())
@@ -101,9 +92,9 @@ public class GridController : MonoBehaviour
         }
         if (isValid)
         {
-            tetraminoController.HandleValidMove(tetraminoMoveInstance);
+            onValidMovement?.Invoke(tetraminoMoveInstance);
         }
-        else tetraminoController.HandleInvalidMove(tetraminoMoveInstance); 
+        else onInvalidMovement?.Invoke(tetraminoMoveInstance);
     }
      
     private List<int> LineCompletitionCheck()

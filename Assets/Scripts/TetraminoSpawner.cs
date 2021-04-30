@@ -17,7 +17,10 @@ public class TetraminoSpawner : MonoBehaviour
 
     public void SelectActiveTetramino()
     {
-        if (_randomizedPool.Count <= 1) CreatePool();        
+        if (_randomizedPool.Count <= 1)
+        {
+            CreatePool();
+        }        
         currentTetramino = _randomizedPool[0];
         _nextTetramino = _randomizedPool[1];
         _randomizedPool.Remove(_randomizedPool[0]);
