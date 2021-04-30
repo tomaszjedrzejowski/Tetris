@@ -73,9 +73,7 @@ public class GridController : MonoBehaviour
             }
         }
         _grid.AddToGrid(filler);
-        // fix - not :P
         GridCleanUp();
-        onLastRowReached?.Invoke(ChcekHeighestLine());
     }
 
     public void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)
