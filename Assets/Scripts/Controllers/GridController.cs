@@ -85,6 +85,7 @@ public class GridController : MonoBehaviour
             }
         }
         _grid.AddToGrid(filler);
+        GridCleanUp();
     }
 
     private void ValidateMove(TetraminoMoveInstance tetraminoMoveInstance)
