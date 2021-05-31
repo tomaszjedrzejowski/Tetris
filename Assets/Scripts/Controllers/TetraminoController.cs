@@ -7,24 +7,10 @@ public class TetraminoController : MonoBehaviour
 {
     public Action<TetraminoMoveInstance> onTryMovement;
     public Action<List<Block>> onSettleDownTetramino;
-        
-    [SerializeField] private TetraminoSpawner tetraminoSpawner;
-    [SerializeField] private PowerUpController powerUpController;
-    
+
     private Tetramino _activeTetramino;
     private int _rotationAttempt = 0;
     private bool _isActive = false;
-
-    private void Start()
-    {
-        tetraminoSpawner.onTetraminoSpawn += HandleNewTetramino;
-    }
-
-
-    private void OnDisable()
-    {
-        tetraminoSpawner.onTetraminoSpawn -= HandleNewTetramino;
-    }
 
     public void TryRotate()
     {
@@ -59,18 +45,14 @@ public class TetraminoController : MonoBehaviour
         }
     }
 
-    public void StartTetraminoFlow()
-    {
-        tetraminoSpawner.CreatePool();
-        tetraminoSpawner.RandomizePool();
-        tetraminoSpawner.SelectActiveTetramino();
-        _isActive = true;
-    }
-
     public void StopTetraminoFlow()
     {
         _isActive = false;
-        _activeTetramino.DestroyTetramino();
+        if (_activeTetramino != null)
+        {
+            _activeTetramino.DestroyTetramino();
+            _activeTetramino = null;
+        }
     }
 
     public void SetActive(bool isActive)
@@ -85,15 +67,14 @@ public class TetraminoController : MonoBehaviour
 
     public void TetraminoFall()
     {
-        if (!_isActive) return;
+        if (!_isActive && _activeTetramino != null) return;
         TryMove(Vector3.down);
     }
 
-    private void HandleNewTetramino(Tetramino newTetramino)
+    public void HandleNewTetramino(Tetramino newTetramino)
     {
         _activeTetramino = newTetramino;
-        _activeTetramino.SetOnStartPosition();
-        powerUpController.RegisterPowerUp(newTetramino);
+        _activeTetramino.SetOnStartPosition();        
     }
 
     public void HandleValidMove(TetraminoMoveInstance tetraminoMoveInstance)
@@ -124,10 +105,9 @@ public class TetraminoController : MonoBehaviour
     private void SettleDownTetramino()
     {
         List<Block> blocksToGrid = _activeTetramino.GetBlocks();
-        onSettleDownTetramino?.Invoke(blocksToGrid);
-        powerUpController.ContinueFillerMove();
         _activeTetramino.DestroyTetramino();
-        tetraminoSpawner.SelectActiveTetramino();
+        _activeTetramino = null;
+        onSettleDownTetramino?.Invoke(blocksToGrid);
     }    
 }
 
