@@ -43,7 +43,7 @@ public class InputController : MonoBehaviour
 
     private void HandlePowerUpActivation(int powerUpIndex)
     {
-        spawner.AddPowerUpToPool(powerUpIndex);
+        //spawner.AddPowerUpToPool(powerUpIndex);
     }
 
     private void HandleRotateInput()

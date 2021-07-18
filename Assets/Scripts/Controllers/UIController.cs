@@ -55,10 +55,9 @@ public class UIController : MonoBehaviour
         levelDisplay.UpdateDisplay(value);
     }
 
-    private void HandleTetraminoListUpdate(Tetramino tetramino)
+    private void HandleTetraminoListUpdate(object tetraminoKey)
     {
-        Sprite sprite = tetramino.GetSprite();
-        spriteDisplay.UpdateDisplay(sprite);
+        spriteDisplay.UpdateDisplay(tetraminoKey);
     }
 
     public void OnStartButtonClick()

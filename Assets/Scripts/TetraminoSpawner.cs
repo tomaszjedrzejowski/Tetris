@@ -6,62 +6,56 @@ using UnityEngine;
 public class TetraminoSpawner : MonoBehaviour
 {
     public Action<Tetramino> onTetraminoSpawn;
-    public Action<Tetramino> onNextTetraminoSelect;    
+    public Action<object> onNextTetraminoSelect;
 
-    [SerializeField] private List<Tetramino> tetraminoPool = new List<Tetramino>();
-    [SerializeField] private List<PowerUp> powerUpPool = new List<PowerUp>();    
-
-    private List<Tetramino> _randomizedPool = new List<Tetramino>();
-    private Tetramino currentTetramino;
-    private Tetramino _nextTetramino;
-
+    [SerializeField] private TetraminoFactory tetraminoFactory;
+    private List<object> randomizedPool = new List<object>();
     public void SelectActiveTetramino()
-    {
-        if (_randomizedPool.Count <= 1)
+    {   
+        var newtetramino = tetraminoFactory.GetTetramino((int)randomizedPool[0]);
+        newtetramino.SetOnStartPosition();
+        onTetraminoSpawn?.Invoke(newtetramino);
+        randomizedPool.Remove(randomizedPool[0]);
+        if(randomizedPool.Count <= 0)
         {
-            CreatePool();
-        }        
-        currentTetramino = _randomizedPool[0];
-        _nextTetramino = _randomizedPool[1];
-        _randomizedPool.Remove(_randomizedPool[0]);
-        onNextTetraminoSelect?.Invoke(_nextTetramino);
-        onTetraminoSpawn?.Invoke(currentTetramino);
+            randomizedPool = CreatePool();
+            randomizedPool = RandomizePool(randomizedPool);
+        }       
+        var nextTetramino = randomizedPool[0];
+        onNextTetraminoSelect?.Invoke(nextTetramino);
     }
 
-    public void RandomizePool()
+    public void CreateRandomizedPool()
     {
-        if (_randomizedPool.Count <= 0) return;
-        for (int i = 0; i < _randomizedPool.Count; i++)
+        randomizedPool = CreatePool();
+        randomizedPool = RandomizePool(randomizedPool);
+    }
+
+    public void Clear()
+    {
+        randomizedPool.Clear();
+    }
+
+    private List<object> CreatePool()
+    {
+        List<object> tetraminoPool = new List<object>();
+        foreach (var item in Enum.GetValues(typeof(tetraminos)))
         {
-            int random = UnityEngine.Random.Range(i, _randomizedPool.Count);
-            Tetramino temp = _randomizedPool[i];
-            _randomizedPool[i] = _randomizedPool[random];
-            _randomizedPool[random] = temp;            
+            tetraminoPool.Add(item);
         }
+        return tetraminoPool;
     }
 
-    public void CreatePool()
-    {        
-        foreach (var tetramino in tetraminoPool)
-        {
-            var newTetramino = Instantiate(tetramino);
-            _randomizedPool.Add(newTetramino);
-        }
-    }
-
-    public void AddPowerUpToPool( int powerUpIndex) 
+    private List<object> RandomizePool(List<object> tetraminoPool)
     {
-        var newPowerUp = Instantiate(powerUpPool[powerUpIndex]);
-        _randomizedPool.Insert(0,newPowerUp); 
-        onNextTetraminoSelect?.Invoke(newPowerUp);
+        for (int i = 0; i < tetraminoPool.Count; i++)
+        {
+            int random = UnityEngine.Random.Range(i, tetraminoPool.Count);
+            var temp = tetraminoPool[i];
+            tetraminoPool[i] = tetraminoPool[random];
+            tetraminoPool[random] = temp;
+        }
+        return tetraminoPool;
     }
 
-    public void ClearSpawner()
-    {
-        foreach (var tetramino in _randomizedPool)
-        {
-            tetramino.DestroyTetramino();
-        }
-        _randomizedPool.Clear();
-    }
 }

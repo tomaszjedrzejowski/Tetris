@@ -424,7 +424,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tetraminoIcon: {fileID: 21300000, guid: cf9b33e8986575543b0132931e2baa6c, type: 3}
-  tetraminoID: 0
   spawnPosition: {x: 5, y: 20, z: 0}
   myBlocks:
   - {fileID: 9140359752370820386}

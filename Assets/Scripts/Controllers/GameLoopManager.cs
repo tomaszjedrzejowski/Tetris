@@ -42,8 +42,7 @@ public class GameLoopManager : MonoBehaviour
 
     public void StartGame()
     {
-        tetraminoSpawner.CreatePool();
-        tetraminoSpawner.RandomizePool();
+        tetraminoSpawner.CreateRandomizedPool();        
         tetraminoSpawner.SelectActiveTetramino();
         tetraminoController.SetActive(true);
     }
@@ -55,7 +54,7 @@ public class GameLoopManager : MonoBehaviour
     public void RestartGame()
     {
         tetraminoController.StopTetraminoFlow();
-        tetraminoSpawner.ClearSpawner();
+        tetraminoSpawner.Clear();
         gridController.ClearGrid();
     }
 
@@ -112,7 +111,7 @@ public class GameLoopManager : MonoBehaviour
         if(isReached == true)
         {            
             onLastRowReached?.Invoke();
-            tetraminoSpawner.ClearSpawner();
+            tetraminoSpawner.Clear();
             GameOver();
         }
         else
